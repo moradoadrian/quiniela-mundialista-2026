@@ -126,6 +126,31 @@ import { PredictionType } from '../../core/models/supabase.models';
         </div>
       </header>
 
+      <!-- Admin Mobile Fast Navigator Link (Sticky Sub-header) -->
+      @if (authService.isAdmin()) {
+        <div class="md:hidden sticky top-16 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 px-4 py-3 flex justify-around gap-2 shadow-md">
+          <a 
+            routerLink="/admin/matches"
+            class="flex-1 bg-slate-800 hover:bg-slate-750 text-center font-bold text-[11px] py-2 rounded-xl border border-slate-700 text-slate-300 flex items-center justify-center gap-1.5 shadow-sm transition-colors"
+          >
+            <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            Gestionar Partidos
+          </a>
+          <a 
+            routerLink="/admin/results"
+            class="flex-1 bg-slate-800 hover:bg-slate-750 text-center font-bold text-[11px] py-2 rounded-xl border border-slate-700 text-slate-300 flex items-center justify-center gap-1.5 shadow-sm transition-colors"
+          >
+            <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+            </svg>
+            Cargar Resultados
+          </a>
+        </div>
+      }
+
       <!-- Main Layout Container -->
       <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
 
@@ -168,31 +193,6 @@ import { PredictionType } from '../../core/models/supabase.models';
           [score]="predictionService.userScore()"
           [streak]="predictionService.predictionStreaks()"
         ></app-dashboard-stats>
-
-        <!-- Admin Mobile Fast Navigator Link -->
-        @if (authService.isAdmin()) {
-          <div class="md:hidden bg-slate-900 border border-slate-800 p-4 rounded-2xl flex justify-around gap-2 mb-6">
-            <a 
-              routerLink="/admin/matches"
-              class="flex-1 bg-slate-800 hover:bg-slate-750 text-center font-bold text-xs py-2 rounded-xl border border-slate-700 text-slate-300 flex items-center justify-center gap-1.5"
-            >
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              Gestionar Partidos
-            </a>
-            <a 
-              routerLink="/admin/results"
-              class="flex-1 bg-slate-800 hover:bg-slate-750 text-center font-bold text-xs py-2 rounded-xl border border-slate-700 text-slate-300 flex items-center justify-center gap-1.5"
-            >
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-              </svg>
-              Cargar Resultados
-            </a>
-          </div>
-        }
 
         <!-- 2-Columns grid layout -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
