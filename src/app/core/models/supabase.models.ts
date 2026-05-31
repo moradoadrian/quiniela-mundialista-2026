@@ -1,5 +1,5 @@
 export type PredictionType = 'L' | 'E' | 'V';
-export type MatchStatus = 'draft' | 'published' | 'closed' | 'finished';
+export type MatchStatus = 'draft' | 'scheduled' | 'published' | 'closed' | 'finished';
 export type UserRole = 'user' | 'admin';
 
 export interface Profile {

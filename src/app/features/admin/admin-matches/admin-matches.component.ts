@@ -215,6 +215,7 @@ import { RouterLink } from '@angular/router';
                         class="bg-slate-900 border border-slate-800 text-[10px] text-slate-300 font-bold px-2 py-1 rounded-lg focus:outline-none"
                       >
                         <option value="draft">Borrador</option>
+                        <option value="scheduled">Programado (Publicado)</option>
                         <option value="published">Publicado</option>
                         <option value="closed">Cerrado</option>
                         <option value="finished">Finalizado</option>
