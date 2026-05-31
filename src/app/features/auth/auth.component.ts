@@ -18,9 +18,9 @@ import { FormsModule } from '@angular/forms';
       <div class="w-full max-w-md backdrop-blur-md bg-slate-900/60 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative z-10 space-y-6">
         
         <!-- App Header Logo -->
-        <div class="text-center space-y-2">
-          <div class="inline-flex bg-emerald-500/10 p-3 rounded-2xl border border-emerald-500/20 text-2xl mb-1 shadow-inner">
-            ⚽
+        <div class="text-center space-y-2 flex flex-col items-center">
+          <div class="inline-flex bg-emerald-500/10 p-2 rounded-2xl border border-emerald-500/20 mb-1 shadow-inner">
+            <img src="logo.png" alt="Quiniela Mundialista Logo" class="w-12 h-12 object-contain" />
           </div>
           <h2 class="text-xl sm:text-2xl font-black text-slate-50 tracking-tight">Quiniela Mundialista 2026</h2>
           <p class="text-xs text-slate-400 font-medium">Predice y compite en vivo en la fase de grupos</p>
@@ -80,13 +80,13 @@ import { FormsModule } from '@angular/forms';
             <!-- Avatar selection -->
             <div class="space-y-1.5">
               <label class="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider block">Elige un Avatar</label>
-              <div class="flex gap-2">
+              <div class="flex flex-wrap gap-2">
                 @for (avatar of avatarList; track avatar) {
                   <button 
                     type="button" 
                     (click)="selectedAvatar.set(avatar)"
-                    class="w-9 h-9 rounded-full overflow-hidden border-2 transition-all"
-                    [ngClass]="selectedAvatar() === avatar ? 'border-emerald-500 scale-105 shadow-md shadow-emerald-500/10' : 'border-slate-800 hover:border-slate-700'"
+                    class="w-9 h-9 rounded-full overflow-hidden border-2 transition-all bg-slate-800"
+                    [ngClass]="selectedAvatar() === avatar ? 'border-emerald-500 scale-110 shadow-md shadow-emerald-500/20' : 'border-slate-800 hover:border-slate-600 hover:scale-105'"
                   >
                     <img [src]="avatar" alt="Avatar option" class="w-full h-full object-cover" />
                   </button>
@@ -155,13 +155,6 @@ import { FormsModule } from '@angular/forms';
           Iniciar sesión con Google
         </button>
 
-        <!-- Sandbox Quick-Logins Info -->
-        <div class="bg-slate-950/50 border border-slate-850/80 p-3 rounded-2xl text-[9px] text-slate-500 space-y-1">
-          <strong class="text-slate-400 font-bold block">💡 Accesos Rápidos Demo:</strong>
-          <span class="block">Correo con palabra "<strong class="text-red-400">admin</strong>" (ej. admin&#64;copa.com) inicia sesión como **Administrador**.</span>
-          <span class="block">Cualquier otro correo (ej. tu&#64;copa.com) inicia sesión como **Usuario Predictor**.</span>
-        </div>
-
       </div>
     </div>
   `,
@@ -185,12 +178,16 @@ export class AuthComponent {
   public password = '';
   public username = '';
   
-  // Custom avatars catalog
+  // Custom avatars catalog (Avatares divertidos y confiables)
   public readonly avatarList = [
-    'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
-    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
-    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
-    'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150'
+    'https://api.dicebear.com/8.x/avataaars/svg?seed=Messi&backgroundColor=b6e3f4&clothing=shirtCrewNeck&clothingColor=pastelBlue',
+    'https://api.dicebear.com/8.x/avataaars/svg?seed=Ronaldo&backgroundColor=c0aede&clothing=shirtVNeck&clothingColor=red',
+    'https://api.dicebear.com/8.x/avataaars/svg?seed=Neymar&backgroundColor=ffdfbf&clothing=shirtCrewNeck&clothingColor=pastelYellow',
+    'https://api.dicebear.com/8.x/avataaars/svg?seed=Mbappe&backgroundColor=d1d4f9&clothing=shirtVNeck&clothingColor=blue02',
+    'https://api.dicebear.com/8.x/avataaars/svg?seed=Modric&backgroundColor=ffdfbf&clothing=shirtCrewNeck&clothingColor=red',
+    'https://api.dicebear.com/8.x/avataaars/svg?seed=Vinicius&backgroundColor=d1d4f9&clothing=shirtVNeck&clothingColor=pastelYellow',
+    'https://api.dicebear.com/8.x/avataaars/svg?seed=DeBruyne&backgroundColor=ffdfbf&clothing=shirtCrewNeck&clothingColor=red',
+    'https://api.dicebear.com/8.x/avataaars/svg?seed=Bellingham&backgroundColor=c0aede&clothing=shirtVNeck&clothingColor=white'
   ];
   public readonly selectedAvatar = signal<string>(this.avatarList[0]);
 

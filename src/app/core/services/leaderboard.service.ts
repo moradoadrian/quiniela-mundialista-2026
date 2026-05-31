@@ -67,15 +67,23 @@ export class LeaderboardService implements OnDestroy {
 
     try {
       // Direct SQL Join query from database profiles, aggregating points from predictions.
-      // Supabase RPC can be utilized, or direct fetches.
-      // We will perform a client-side aggregation based on all fetched profiles and predictions for simplicity
       const { data: profiles, error: pErr } = await this.supabaseService.client
         .from('profiles')
         .select('id, username, avatar_url, role');
 
+      if (pErr) {
+        console.error('Error fetch perfiles:', pErr);
+      } else {
+        console.log('Perfiles obtenidos de Supabase:', profiles?.length, profiles);
+      }
+
       const { data: predictions, error: prErr } = await this.supabaseService.client
         .from('predictions')
         .select('user_id, points');
+
+      if (prErr) {
+        console.error('Error fetch predictions:', prErr);
+      }
 
       if (profiles) {
         const dict: Record<string, { points: number; count: number }> = {};

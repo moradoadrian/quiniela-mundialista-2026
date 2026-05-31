@@ -278,7 +278,7 @@ import { PredictionType } from '../../core/models/supabase.models';
           </div>
 
           <!-- Column 3: Sidebar Leaderboard -->
-          <div class="lg:col-span-1 space-y-6">
+          <div id="leaderboard-section" class="lg:col-span-1 space-y-6">
             
             <!-- Realtime Leaderboard -->
             <app-leaderboard
@@ -316,6 +316,17 @@ import { PredictionType } from '../../core/models/supabase.models';
         </div>
 
       </main>
+
+      <!-- Botón Flotante para Móviles (Opción A) -->
+      <button 
+        (click)="scrollToLeaderboard()"
+        class="lg:hidden fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-4 py-3 rounded-full shadow-[0_0_20px_rgba(52,211,153,0.3)] transition-transform active:scale-95 flex items-center gap-2 border border-emerald-400"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        </svg>
+        <span class="text-xs uppercase tracking-wider">Ver Ranking</span>
+      </button>
     </div>
   `,
   styles: [`
@@ -428,6 +439,16 @@ export class DashboardComponent {
   public async syncOfflineData(): Promise<void> {
     await this.predictionService.syncOfflinePredictions();
     await this.leaderboardService.fetchLeaderboard();
+  }
+
+  /**
+   * Scrolls smoothly to the leaderboard section (Mobile UX).
+   */
+  public scrollToLeaderboard(): void {
+    const el = document.getElementById('leaderboard-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   /**

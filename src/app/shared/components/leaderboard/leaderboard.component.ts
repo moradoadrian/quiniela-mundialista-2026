@@ -14,7 +14,7 @@ import { LeaderboardUserEntry } from '../../../core/models/supabase.models';
           <h3 class="text-sm font-extrabold text-slate-100 flex items-center gap-2 tracking-wide">
             🏆 Tabla de Posiciones
           </h3>
-          <p class="text-[10px] text-slate-500 font-medium">Actualizaciones de Supabase Realtime</p>
+          <p class="text-[10px] text-slate-500 font-medium">Actualizaciones en Tiempo Real</p>
         </div>
         <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] px-2.5 py-1 rounded-full font-extrabold uppercase">
           En Vivo
