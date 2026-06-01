@@ -15,11 +15,11 @@ import { PredictionType } from '../../core/models/supabase.models';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    NgClass, 
+    NgClass,
     NgIf,
-    RouterLink, 
-    DashboardStatsComponent, 
-    MatchListComponent, 
+    RouterLink,
+    DashboardStatsComponent,
+    MatchListComponent,
     LeaderboardComponent
   ],
   template: `
@@ -368,9 +368,8 @@ export class DashboardComponent {
       : 'PARTICIPANTE';
   }
 
-  // Computed Signal for filter-aware match list
   public readonly filteredMatches = computed(() => {
-    let result = this.matchService.matches();
+    let result = [...this.matchService.matches()];
     const group = this.selectedGroup();
     const matchday = this.selectedMatchday();
 
@@ -400,7 +399,7 @@ export class DashboardComponent {
   public readonly hitRate = computed(() => {
     const preds = this.predictionService.predictions();
     const matches = this.matchService.matches();
-    
+
     const finishedWithPreds = matches.filter(m => m.status === 'finished' && preds[m.id]);
     if (finishedWithPreds.length === 0) return 0;
 
