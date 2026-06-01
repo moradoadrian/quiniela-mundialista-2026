@@ -369,10 +369,41 @@ export class DashboardComponent {
   }
 
   public readonly filteredMatches = computed(() => {
-    let result = [...this.matchService.matches()];
+    // Clonamos los partidos para no mutar el estado global
+    let result = this.matchService.matches().map(m => ({ ...m }));
+    
+    // 1. Ordenamos cronológicamente de manera global.
+    // Si tienen exactamente la misma fecha, desempatamos usando el identificador 'round' original de la DB.
+    result.sort((a, b) => {
+      const dateDiff = new Date(a.match_date).getTime() - new Date(b.match_date).getTime();
+      if (dateDiff === 0) {
+        return a.round - b.round; // Partido 1 a la izquierda, Partido 6 a la derecha
+      }
+      return dateDiff;
+    });
+
+    // 2. Mapeamos dinámicamente a qué "Jornada" pertenece cada partido
+    // basándonos en la estructura original de los partidos (del 1 al 6) en la base de datos.
+    // Estructura oficial del fixture (round robin 4 equipos):
+    // Jornada 1: Partidos 1 y 6
+    // Jornada 2: Partidos 2 y 5
+    // Jornada 3: Partidos 3 y 4
+    const roundMap: Record<number, 1 | 2 | 3> = {
+      1: 1, 6: 1,
+      2: 2, 5: 2,
+      3: 3, 4: 3
+    };
+
+    result.forEach(m => {
+      // Guardamos el número original de la base de datos para mapearlo correctamente
+      const dbRound = m.round;
+      m.round = roundMap[dbRound] || 1;
+    });
+
     const group = this.selectedGroup();
     const matchday = this.selectedMatchday();
 
+    // 3. Aplicamos los filtros
     if (group !== 'TODOS') {
       result = result.filter(m => m.group_name === group);
     }
