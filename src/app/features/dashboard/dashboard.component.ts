@@ -67,6 +67,17 @@ import { PredictionType } from '../../core/models/supabase.models';
                   </svg>
                   Resultados
                 </a>
+                <button 
+                  (click)="downloadCSV()"
+                  [disabled]="leaderboardService.loading()"
+                  class="bg-emerald-900/30 hover:bg-emerald-800/50 border border-emerald-800/50 text-emerald-400 hover:text-emerald-300 font-bold text-[10px] px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Descargar Predicciones"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Exportar CSV
+                </button>
               </div>
             }
 
@@ -461,6 +472,13 @@ export class DashboardComponent {
     if (!res.success) {
       alert(res.message);
     }
+  }
+
+  /**
+   * Downloads all users' predictions in CSV format.
+   */
+  public downloadCSV(): void {
+    this.leaderboardService.exportAllPredictionsCSV();
   }
 
   /**

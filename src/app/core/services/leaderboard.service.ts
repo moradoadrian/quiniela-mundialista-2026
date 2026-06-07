@@ -215,6 +215,100 @@ export class LeaderboardService implements OnDestroy {
     this.sortAndAssignRanks([userEntry, ...competitorEntries]);
   }
 
+  /**
+   * Generates and downloads a CSV file containing all user predictions and match results.
+   */
+  public async exportAllPredictionsCSV(): Promise<void> {
+    if (this.isDemoMode()) {
+      alert('La exportación de CSV no está disponible en el modo Demo.');
+      return;
+    }
+
+    try {
+      this._loading.set(true);
+
+      // 1. Fetch all profiles
+      const { data: profiles, error: pErr } = await this.supabaseService.client
+        .from('profiles')
+        .select('id, username');
+      
+      if (pErr) throw pErr;
+
+      // 2. Fetch all predictions
+      const { data: predictions, error: prErr } = await this.supabaseService.client
+        .from('predictions')
+        .select('user_id, match_id, prediction, points');
+
+      if (prErr) throw prErr;
+
+      // 3. Get matches from local service state
+      const matches = this.matchService.matches();
+      const matchMap = new Map<string, typeof matches[0]>();
+      matches.forEach(m => matchMap.set(m.id, m));
+
+      // 4. Create User Map
+      // 4. Prepare Users (Columns)
+      let users = profiles ? [...profiles] : [];
+      // Ordenamos los usuarios alfabéticamente para las columnas
+      users.sort((a, b) => (a.username || '').localeCompare(b.username || ''));
+
+      // 5. Generate CSV Rows (Matrix Layout)
+      // Primera fila: Cabeceras (Local, vs, Visitante, Usuario 1, Usuario 2...)
+      const headerUsers = users.map(u => `"${(u.username || 'Usuario').replace(/"/g, '""')}"`);
+      let csvContent = `Local,vs,Visitante,${headerUsers.join(',')}\n`;
+
+      if (predictions) {
+        // Mapeamos las predicciones: match_id -> user_id -> prediction
+        const predMap = new Map<string, Map<string, string>>();
+        predictions.forEach((pred: any) => {
+          if (!predMap.has(pred.match_id)) predMap.set(pred.match_id, new Map<string, string>());
+          predMap.get(pred.match_id)!.set(pred.user_id, pred.prediction);
+        });
+
+        // Ordenamos los partidos cronológicamente igual que en el dashboard
+        const sortedMatches = [...matches].sort((a, b) => {
+          const dateDiff = new Date(a.match_date).getTime() - new Date(b.match_date).getTime();
+          if (dateDiff === 0) return a.round - b.round;
+          return dateDiff;
+        });
+
+        // Generamos una fila por cada partido
+        sortedMatches.forEach(match => {
+          const cleanHome = `"${match.homeTeam.name.replace(/"/g, '""')}"`;
+          const cleanAway = `"${match.awayTeam.name.replace(/"/g, '""')}"`;
+          
+          let row = `${cleanHome},vs,${cleanAway}`;
+          
+          // Agregamos la columna de cada usuario (L, E, V, o vacío)
+          users.forEach(user => {
+            const userPred = predMap.get(match.id)?.get(user.id) || '';
+            row += `,${userPred}`;
+          });
+          
+          csvContent += row + '\n';
+        });
+      }
+
+      // 6. Trigger Download
+      const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' }); // Added BOM for Excel UTF-8 support
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'predicciones_mundial_2026.csv');
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+    } catch (e) {
+      console.error('Error exportando CSV:', e);
+      alert('Hubo un error al exportar los datos a CSV.');
+    } finally {
+      this._loading.set(true); // Keep UI responsive
+      setTimeout(() => this._loading.set(false), 500);
+    }
+  }
+
   ngOnDestroy(): void {
     if (this.realtimeChannel) {
       this.supabaseService.client.removeChannel(this.realtimeChannel);
